@@ -1,2 +1,4 @@
 # Soundifically
 An ear-training app for Dolby class at Wroclaw University of Science and Technology
+
+Projekt ma na celu stworzenie aplikacji, w której użytkownik będzie miał za zadanie lokalizowanie dźwięków w przestrzeni z wykorzystaniem technologii Dolby Atmos. Punktowe źródło dźwięku będzie pojawiało się w określonym miejscu w trójwymiarowej przestrzeni euklidesowej. Użytkownik, poprzez interfejs graficzny, będzie oznaczał miejsce, z którego słyszy dźwięk. Wraz ze wzrostem ilości poprawnych trafień, margines błędu będzie spadał. Program ma na celu nauczyć użytkownika precyzyjnego lokalizowania dźwięków w przestrzeni. Wykorzystywany może być do szkolenia adeptów realizacji dźwięku pod kątem miksowania materiałów do użytku w systemach dźwięku przestrzennego. Przewidywana rozbudowa o inne moduły do treningu słuchu. Aplikacja zostanie zbudowana w środowisku Unity zintegrowanym z technologią Dolby Atmos.
