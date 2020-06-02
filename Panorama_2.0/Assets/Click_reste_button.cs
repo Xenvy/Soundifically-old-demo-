@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 
 public class Click_reste_button : MonoBehaviour
@@ -16,6 +17,8 @@ public class Click_reste_button : MonoBehaviour
     public int life = 100;
     public int score = 0;
     public int level = 1;
+    public float vol = 50;
+    public int marker = 1;
 
     public Text scoreText;
     public Text lifeText;
@@ -39,6 +42,8 @@ public class Click_reste_button : MonoBehaviour
         bul_sound_instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject, cachedRigidBody));
         bul_sound_instance.setParameterByName("sound_r", sound_r);
         bul_sound_instance.setParameterByName("sound_x", sound_x);
+        bul_sound_instance.setParameterByName("Track", marker);
+        bul_sound_instance.setVolume(5f);
         bul_sound_instance.start();
     }
 
@@ -73,13 +78,26 @@ public class Click_reste_button : MonoBehaviour
                         {
                             bul_sound_instance.release();
                             bul_sound_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                            score += level*life;
+                            score += level * life;
                             scoreText.text = score.ToString();
                             levelText.text = level.ToString();
                             SpawnNextButton();
                         }
                     }
+                    else if (hit.collider.tag == "VolumeMenu" && Input.GetMouseButtonDown(0))
+                    {
+                        SetVolume(vol);
+                    }
+                    else if (hit.collider.tag == "Back" && Input.GetMouseButtonDown(0))
+                    {
+                        bul_sound_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                    }
                 }
+
+            }
+            else
+            {
+                GameOver();
             }
         }
         else
@@ -99,7 +117,8 @@ public class Click_reste_button : MonoBehaviour
 
         Vector3 pos = center + new Vector3(x, yy, 0);
         sound_r = Convert.ToInt32((Math.Sqrt(Math.Pow(yy, 2) + Math.Pow(x, 2))) * 10);
-        sound_x = Math.Abs(Convert.ToInt32((Math.Atan(yy / x)) * 10));
+        sound_x = Convert.ToInt32((Math.Atan2(yy, x) * 10));
+        marker = Convert.ToInt32(zz);
         Instantiate(circelPrefab, pos, Quaternion.identity);
 
         Destroy(gameObject);
@@ -108,8 +127,31 @@ public class Click_reste_button : MonoBehaviour
 
     void GameOver()
     {
+        cachedRigidBody = GetComponent<Rigidbody>();
 
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+
+        bul_sound_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        if (hit.collider.tag == "VolumeMenu" && Input.GetMouseButtonDown(0))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
     }
+
+    public void MusicStop()
+    {
+        bul_sound_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
+    public void SetVolume(float newVolume)
+    {
+        vol = newVolume;
+        bul_sound_instance.setVolume(vol);
+    }
+
 
     void OnMouseEnter()
     {
