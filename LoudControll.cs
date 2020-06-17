@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoudControll : MonoBehaviour
 {
-
+    //Variables needed to run the exercise
     public int life = 100;
     public int fScore = 0;
     public int score = 0;
@@ -21,6 +21,7 @@ public class LoudControll : MonoBehaviour
     public int volumeCor = 0;
     public int track = 0;
 
+    //Text variables for displaying data in the GUI
     public Text scoreText;
     public Text scoreText2;
     public Text scoreText3;
@@ -28,7 +29,8 @@ public class LoudControll : MonoBehaviour
     public Text levelText;
     public Text num1;
     public Text num2;
-    
+
+    //UnityEngine class instances
     public GameObject wrongText;
     public GameObject rightText;
     public GameObject WinningText;
@@ -38,6 +40,7 @@ public class LoudControll : MonoBehaviour
     public GameObject ButtonB1;
     public GameObject ButtonB2;
 
+    //FMOD instance initiation
     [FMODUnity.EventRef]
     public string bul_sound = "event:/Loud";
     FMOD.Studio.EventInstance loud_instance;
@@ -45,7 +48,7 @@ public class LoudControll : MonoBehaviour
 
     void Start()
     {
-        //FMOD passing parameters
+        //FMOD parameters
         loud_instance = FMODUnity.RuntimeManager.CreateInstance(bul_sound);
         loud_instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject, cachedRigidBody));
         loud_instance.setParameterByName("Volume", volume);
@@ -55,19 +58,13 @@ public class LoudControll : MonoBehaviour
 
     void Update()
     {
-        cachedRigidBody = GetComponent<Rigidbody>();
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-
-        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
         scoreText.text = score.ToString();
         scoreText2.text = score.ToString();
         scoreText3.text = score.ToString();
         levelText.text = level.ToString();
         lifeText.text = life.ToString();
 
+        //Setting buttons according to the drawn configuration
         if (sideFlag == 0)
         {
             num1.text = volumeCor.ToString();
@@ -79,6 +76,7 @@ public class LoudControll : MonoBehaviour
             num2.text = volumeCor.ToString();
         }
 
+        //Setting highest score
         if (score > fScore)
         {
             fScore = score;
@@ -87,6 +85,7 @@ public class LoudControll : MonoBehaviour
 
     public void StartGame()
     {
+        //Parameter randomization
         loud_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         volume = Random.Range(-30, 11);
         track = Random.Range(0, 11);
@@ -123,6 +122,7 @@ public class LoudControll : MonoBehaviour
     {
         if (startFlag == 1)
         {
+            //FMOD parameters settings
             loud_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             loud_instance.setParameterByName("Volume", -10);
             loud_instance.setParameterByName("Track", track);
@@ -134,6 +134,7 @@ public class LoudControll : MonoBehaviour
     {
         if (startFlag == 1)
         {
+            //FMOD parameters settings
             loud_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             loud_instance.setParameterByName("Volume", volume);
             loud_instance.setParameterByName("Track", track);
@@ -180,6 +181,7 @@ public class LoudControll : MonoBehaviour
 
     public void BackToMain()
     {
+        //Passing the highest scores to the results board
         if (fScore > PlayerPrefs.GetInt("LoudHS1", 0))
         {
             PlayerPrefs.SetInt("LoudHS3", PlayerPrefs.GetInt("LoudHS2", 0));
