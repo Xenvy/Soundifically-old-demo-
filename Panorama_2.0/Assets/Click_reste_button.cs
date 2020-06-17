@@ -11,32 +11,35 @@ using UnityEditor;
 
 public class Click_reste_button : MonoBehaviour
 {
+    //UnityEngine class instances
     public GameObject circelPrefab;
     public GameObject GameOverMenu;
     public GameObject WinningMenu;
     public GameObject SpeakerPoint;
 
+    //Structure variables collecting the cursor position
     public Vector3 center;
     public Vector3 size;
     public Vector3 scaleChange;
     public Vector3 speakrePos;
 
+    //Variables needed to run the exercise
     public int life = 100;
     public int score = 0;
     public int level = 1;
-    public int marker = 1;
     public int shot = 0;
 
+    //Text variables for displaying data in the GUI
     public Text scoreText;
     public Text scoreText2;
     public Text scoreText3;
     public Text lifeText;
     public Text levelText;
 
-    public Texture2D gameCoursor;
-
+    //Variables used to control the sound engine
     public int sound_r = 0;
     public int sound_x = 0;
+    public int marker = 1;
 
     //FMOD instance initiation
     [FMODUnity.EventRef]
@@ -47,7 +50,7 @@ public class Click_reste_button : MonoBehaviour
     void Start()
     {
 
-        //FMOD passing parameters
+        //FMOD parameters
         bul_sound_instance = FMODUnity.RuntimeManager.CreateInstance(bul_sound);
         bul_sound_instance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject, cachedRigidBody));
         bul_sound_instance.setParameterByName("sound_r", sound_r);
@@ -62,12 +65,13 @@ public class Click_reste_button : MonoBehaviour
     {
         cachedRigidBody = GetComponent<Rigidbody>();
 
+        //Getting cursor location
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
         RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
-
+        //Conditions of handling click the mouse on the appropriate fields of the board
         if (hit.collider == null && Input.GetMouseButtonDown(0))
         {
             life = life - 10;
@@ -121,6 +125,7 @@ public class Click_reste_button : MonoBehaviour
 
     }
 
+    //Function handling button generation
     void SpawnNextButton()
     {
         float x = UnityEngine.Random.Range(-3.65f, 3.65f);
@@ -143,6 +148,7 @@ public class Click_reste_button : MonoBehaviour
 
     }
 
+    //Losing board / passing the highest scores to the results board
     void GameOver()
     {
         bul_sound_instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -170,6 +176,7 @@ public class Click_reste_button : MonoBehaviour
 
     }
 
+    //Victory board / passing the highest scores to the results board
     void Winning()
     {
 
